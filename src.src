@@ -1,0 +1,21 @@
+
+skel = [
+	files = [ src.src log.log
+		core = [ ypp.ypp lpp.lpp hpp.hpp cpp.cpp ]]
+	Makefile bat.bat .gitignore
+]
+
+bat.bat = [
+	'@start .'
+	'@gvim -p '+files/' '
+]
+
+ .gitignore = '
+*~
+*.swp
+exe.exe
+log.log
+ypp.tab.?pp
+lex.yy.c
+'
+

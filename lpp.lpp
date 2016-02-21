@@ -1,0 +1,33 @@
+%{
+#include "hpp.hpp"
+string LexString; // string parser buffer (special lexer state)
+%}
+%option noyywrap
+%option yylineno
+%x lexstring
+%%
+#[^\n]*			{}
+
+'				{BEGIN(lexstring); LexString="";}
+<lexstring>'	{BEGIN(INITIAL); yylval.o = new Str(LexString); return STR; }
+<lexstring>\n	{LexString+=yytext[0];}
+<lexstring>.	{LexString+=yytext[0];}
+
+[a-zA-Z0-9_.]+	TOC(Sym,SYM)
+
+\(				TOC(Op,LB)
+\)				TOC(Op,RB)
+\[				TOC(Op,LQ)
+\]				TOC(Op,RQ)
+\{				TOC(Op,LC)
+\}				TOC(Op,RC)
+
+\=				TOC(Op,EQ)
+\@				TOC(Op,AT)
+
+\+				TOC(Op,ADD)
+\/				TOC(Op,DIV)
+
+[ \t\r\n]+		{}
+%%
+
