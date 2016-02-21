@@ -1,21 +1,14 @@
 
-skel = [
+skelex = [
 	files = [ src.src log.log
-		core = [ ypp.ypp lpp.lpp hpp.hpp cpp.cpp ]]
-	Makefile bat.bat .gitignore
+		core = [ ypp.ypp lpp.lpp hpp.hpp cpp.cpp ]
+	]
+	Makefile bat.bat
+	.gitignore = '*~\n*.swp\nexe.exe\nlog.log\nypp.tab.?pp\nlex.yy.c'
 ]
 
 bat.bat = [
 	'@start .'
-	'@gvim -p '+files/' '
+	'@gvim -p '+files/'\s'
 ]
-
- .gitignore = '
-*~
-*.swp
-exe.exe
-log.log
-ypp.tab.?pp
-lex.yy.c
-'
 
