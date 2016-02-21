@@ -20,4 +20,6 @@ linker [label="linker: линкер"];
 "win32.dll" -> FFI [label="\ динамическое связывание"];
 FFI-> dyna [label="\ интерфейс Fast Foreign Interface"];
 {rank=same; codegen; "user.o"; "win32.dll"; }
+{rank=same; dyna -> shell ; shell [label="IDE/GUI\nоболочка"];}
+shell [shape=Msquare];
 }

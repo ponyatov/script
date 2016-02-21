@@ -1,6 +1,6 @@
 \input{header}
 \author{Дмитрий Понят\'{о}в\ \email{dponyatov@gmail.com}}
-\title{HOWTO: как написать компилятор$^*$}
+\title{HOWTO: как написать интерпретатор$^*$\\(программирование в свободном синтаксисе)}
 \begin{document}\secdown
 \maketitle
 \tableofcontents
@@ -48,7 +48,7 @@
 
 \secly{Структура компилятора}
 
-\includegraphics[height=0.95\textheight]{struct.pdf}
+\includegraphics[height=0.98\textheight]{struct.pdf}
 
 \secly{FSP: программирование в свободном синтаксисе}
 
@@ -59,7 +59,7 @@ FSP\note{[F]ree [S]yntax [P]rogramming}\ --- метод \term{программи
 описывая на нем логику программы, файлы конфигурации, GUI и пользовательский
 командный интерфейс (CLI).
 
-\secly{Скелет FSP-программы}
+\secly{Скелет лексической программы}
 
 Создадим Скелет программы использующей лексический разбор $\rightarrow$
 лексической программы $\rightarrow$ lexical skeleton $\rightarrow$ skelex:
@@ -109,6 +109,48 @@ git push -u gh master
 
 \bigskip
 \url{https://github.com/ponyatov/script.git}.
+
+\bigskip
+В качестве примера рассмотрим описание скелета FSP-программы на нашем
+собственном языке:
+
+\lstx{skeleton.src}{../src.src}
+
+\secly{Синтаксис языка bI}
+
+\begin{verbatim}
+                                    # строчный комментарий
+\end{verbatim}
+\begin{verbatim}
+                                    # скалярные типы:
+Sym.bol_01                          # символ
+'строка
+\tможет быть\sмногострочной'        # \t табуляция \n конец строки \s пробел
+\end{verbatim}
+\begin{verbatim}
+                                    # композитные типы:
+[ flat list ]                       # плоский список
+lisp,like,cons,list                 # список на базе cons-ячеек в стиле Lisp
+\end{verbatim}
+\begin{verbatim}
+                                    # выражения в инфиксном синтаксисе
+A+B-C*D/E^F                         # арифметические операторы
+sin@X+cos@Y/exp@Z                   # применение встроенных функций
+Z = sqrt@(X^2+Y^2)                  # биндинг выражений (назначение, уравнение)
+\end{verbatim}
+\begin{verbatim}
+pp = {P: P+'.pp'}                   # лямбда-функции, создание именованной функции
+x.x = {X: pp@X+'.'+pp@X}
+files = x.x@y + x.x|y,l,h,c	        # одиночное и map- применение функции
+\end{verbatim}
+\begin{verbatim}
+class:object                        # объектно-ориентированное программирование
+class:lexeme                        # одиночное наследование без модификации
+object,lexeme:comment               # множественное наследование
+    % regexp = '#[^\n]*'            # поле данных
+    % lex = {lexrule@regexp,'{}'}   # метод (вызов функции-генератора правила лексера)
+comment@apply <comment:bracks>      # инстанциация объекта через @ и <:>
+\end{verbatim}
 
 \secrel{Синтаксический анализатор}\secdown
 
@@ -166,6 +208,7 @@ git push -u gh master
 
 игнорировать любой текст от символа \#\ до конца строки
 
+\bigskip
 Самый сложный набор правил\ --- разбор строки, т.к. он требует отдельный
 набор правил. Переключение набора правил лексера выполняется через
 \emph{состояния}. Стартовое (и единственное) состояние лексера \verb|INITIAL|.
@@ -179,6 +222,7 @@ git push -u gh master
 \verb|<lexstring>'|\ переключает лексер в начальное состояние, и возвращает
 токен-строку.
 
+\bigskip
 Основным объектом нашего языка является \termdef{символ}{символ}:
 
 \lst{lpp.lpp лексемы-символы}{tmp/lexer.sym}{C++}
@@ -187,9 +231,22 @@ git push -u gh master
 цифр, знаков подчеркивания и точки\note{нужна для распознавания имен файлов
 как символов}.
 
+\lst{lpp.lpp скобки}{tmp/lexer.brs}{C++}
+\lst{lpp.lpp инфиксные операторы}{tmp/lexer.ops}{C++}
+
+И наконец, будем игнорировать все пробельные символы:
+\lst{lpp.lpp пробелы}{tmp/lexer.spaces}{C++}
+
+\bigskip
+Вызв генератора \prog{flex}\ приведет к появлению файла 
+\verb|lex.yy.c|\ с кодом лексера:
+\lst{Makefile: генерация кода лексера}{tmp/lexer.mk}{make}
+
 \secrel{Парсер /bison/}
 
 \termdef{Парсер}{парсер}
+
+\lst{Makefile: генерация кода парсера}{tmp/parser.mk}{make}
 
 \secup
 
