@@ -3,11 +3,16 @@
 %% screen paper layout (A5 landscape)
 \usepackage[paperwidth=210mm,paperheight=148mm,margin=5mm]{geometry}
 %% hypertext pdf
-\usepackage[unicode]{hyperref}
+\usepackage[unicode,
+	colorlinks=false,
+	allbordercolors={0 0 0},
+	pdfborderstyle={/S/U/W 1}]{hyperref}
 %% graphics
 \usepackage[pdftex]{graphicx}
 %% hyperlinks
-\newcommand{\email}[1]{$<$#1$>$}
+\newcommand{\email}[1]{$<$\href{#1}{#1}$>$}
+%% index
+\usepackage{makeidx}\makeindex
 
 % Cyrillization
 \usepackage[T1,T2A]{fontenc}
@@ -28,4 +33,10 @@
 	\ifthenelse{\equal{\value{secdepth}}{-3}}{\subsection{#1}}{}
 	\ifthenelse{\equal{\value{secdepth}}{-4}}{\subsubsection{#1}}{}
 }
+
+%misc
+\renewcommand{\emph}[1]{\textbf{#1}}
+\newcommand{\note}[1]{\footnote{\ #1}}
+\newcommand{\termdef}[2]{\textit{#1}\index{#2}}
+\newcommand{\xref}[2]{#1\ref{#2}\ }
 
