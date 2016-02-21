@@ -1,7 +1,7 @@
 TEX = script.tex header.tex
 
 TEX += tmp/lexer.hpp tmp/lexer.head tmp/lexer.comment tmp/lexer.string
-TEX += tmp/lexer.sym
+TEX += tmp/lexer.sym tmp/mk.mk
 
 PNG = struct.pdf
 
@@ -12,6 +12,9 @@ script.pdf: $(TEX) $(PNG) Makefile
 
 %.pdf: %.dot
 	dot -Tpdf -o $@ $<
+
+tmp/mk.mk: ../Makefile
+	cp $< $@
 
 tmp/%: ../hpp.hpp ../lpp.lpp tmp/src2lst$(EXE)
 	cat ../hpp.hpp ../lpp.lpp | tmp/src2lst$(EXE) > $@

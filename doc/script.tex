@@ -29,7 +29,10 @@
 		\emph{Интерпретатором например является
 		Java\note{и Android без кода NDK}}:
 		байт-код из .class и .jar файлов преобразуется в машинный код
-		после запуска программы (в рантайме).
+		после запуска программы (в рантайме). Одновременно Java можно называть
+		и компилятором, так как он компилирует программы в байт-код,
+		эквивалентный машинному коду виртуальной Java-машины: стадии компиляции
+		и выполнения разделены.
 	\item[\termdef{скрипт-движок}{скрипт-движок}]\label{script}\ ---
 		интерпретатор, встраиваемый в другие программы, и используемый
 		для чтения файлов конфигурации и написания макросов. В комплект поставки
@@ -43,6 +46,10 @@
 *\ в этом HOWTO описана реализация \xref{скриптового языка}{script}\ с
 алголоподобным синтаксисом.
 
+\secly{Структура компилятора}
+
+\includegraphics[height=0.95\textheight]{struct.pdf}
+
 \secly{FSP: программирование в свободном синтаксисе}
 
 FSP\note{[F]ree [S]yntax [P]rogramming}\ --- метод \term{программирования
@@ -52,9 +59,56 @@ FSP\note{[F]ree [S]yntax [P]rogramming}\ --- метод \term{программи
 описывая на нем логику программы, файлы конфигурации, GUI и пользовательский
 командный интерфейс (CLI).
 
-\secly{Структура компилятора}
+\secly{Скелет FSP-программы}
 
-\includegraphics[height=0.95\textheight]{struct.pdf}
+Создадим Скелет программы использующей лексический разбор $\rightarrow$
+лексической программы $\rightarrow$ lexical skeleton $\rightarrow$ skelex:
+
+\begin{verbatim}
+mkdir script
+cd script
+touch src.src log.log ypp.ypp lpp.lpp hpp.hpp cpp.cpp Makefile bat.bat .gitignore
+echo gvim -p src.src log.log ypp...cpp.cpp Makefile bat.bat .gitignore >> bat.bat
+bat
+\end{verbatim}
+
+Отредактируйте файлы\note{если вы пользуетесь Vimом под Windows}:
+
+\lstx{bat.bat : gvim win32 helper}{../bat.bat}
+
+\bigskip
+Если вы пользуетесь Git, создайте на GitHub репозиторий, и подключите его к
+проекту\note{у вас уже должны быть настроены ключи SSH-доступа для вашего
+аккаунта на GitHub}:
+\begin{verbatim}
+git init
+git remote add gh git@github.com:yourname/script.git
+git commit -a -m "+skelex"
+git push -u gh master
+\end{verbatim}
+\lstx{.gitignore}{../.gitignore}
+
+\begin{tabular}{l l}
+	src.src & исходный код \\
+	log.log & лог транслятора \\
+	\hline
+	ypp.ypp & лексер /flex/ \\
+	lpp.lpp & парсер /bison/ \\
+	hpp.hpp & хедеры \\
+	cpp.cpp & C++ ядро интерпретатора \\
+	Makefile & \\
+	\hline
+	bat.bat & gvim win32 helper \\
+	.gitignore & \\
+\end{tabular}
+
+\lst{Makefile}{tmp/mk.mk}{make}
+
+\bigskip
+Содержимое остальных файлов, описанное далее, легко скопипастить с
+
+\bigskip
+\url{https://github.com/ponyatov/script.git}.
 
 \secrel{Синтаксический анализатор}\secdown
 
