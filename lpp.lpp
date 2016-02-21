@@ -1,6 +1,6 @@
 %{
 #include "hpp.hpp"
-string LexString; // string parser buffer (special lexer state)
+string LexString;
 %}
 %option noyywrap
 %option yylineno
@@ -11,6 +11,8 @@ string LexString; // string parser buffer (special lexer state)
 '				{BEGIN(lexstring); LexString="";}
 <lexstring>'	{BEGIN(INITIAL); yylval.o = new Str(LexString); return STR; }
 <lexstring>\\s	{LexString+=' ';}
+<lexstring>\\t	{LexString+='\t';}
+<lexstring>\\n	{LexString+='\n';}
 <lexstring>\n	{LexString+=yytext[0];}
 <lexstring>.	{LexString+=yytext[0];}
 

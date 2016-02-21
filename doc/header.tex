@@ -42,8 +42,9 @@ basicstyle=\small,	% small text size
 frame=single, % show frames around
 numbers=left,numberstyle=\small,numbersep=1mm, % line numbering
 tabsize=4, % tab style
-keywordstyle=\textnf,
+keywordstyle=\textbf,
 commentstyle=\textit,
+showspaces=false
 }
 \newcommand{\lstx}[2]{\lstinputlisting[title=#1]{#2}}
 \newcommand{\lst }[3]{\lstinputlisting[title=#1,language=#3]{#2}}
@@ -51,6 +52,9 @@ commentstyle=\textit,
 %misc
 \renewcommand{\emph}[1]{\textbf{#1}}
 \newcommand{\note}[1]{\footnote{\ #1}}
+\newcommand{\term}[1]{\textit{#1}}
 \newcommand{\termdef}[2]{\textit{#1}\index{#2}}
 \newcommand{\xref}[2]{#1\ref{#2}\ }
+\newcommand{\prog}[1]{\textbf{#1}}
+\newcommand{\file}[1]{\textbf{#1}}
 
