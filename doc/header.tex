@@ -34,6 +34,20 @@
 	\ifthenelse{\equal{\value{secdepth}}{-4}}{\subsubsection{#1}}{}
 }
 
+% listings
+\usepackage{verbatim}
+\usepackage{listings}
+\lstset{
+basicstyle=\small,	% small text size
+frame=single, % show frames around
+numbers=left,numberstyle=\small,numbersep=1mm, % line numbering
+tabsize=4, % tab style
+keywordstyle=\textnf,
+commentstyle=\textit,
+}
+\newcommand{\lstx}[2]{\lstinputlisting[title=#1]{#2}}
+\newcommand{\lst }[3]{\lstinputlisting[title=#1,language=#3]{#2}}
+
 %misc
 \renewcommand{\emph}[1]{\textbf{#1}}
 \newcommand{\note}[1]{\footnote{\ #1}}

@@ -1,0 +1,23 @@
+digraph {
+"file.src" -> lexer [label="\ исходный код"];
+lexer [label="lexer: лексер"];
+lexer -> parser [label="\ токены"];
+parser [label="parser: парсер синтаксиса"];
+parser -> codegen [label="\ AST-дерево разбора"];
+codegen [label="codegen: генератор кода"];
+codegen -> "file.o" [label="\ машинный код"];
+"file.src","file.o","user.o","win32.dll","program.exe" [shape=parallelogram];
+parser -> dyna  [label="\ AST"];
+{rank=same; lexer; dyna }
+{rank=same; parser; FFI; }
+jit [label="динамический\nJIT-компилятор"];
+dyna [label="runtime-среда выполнения\nдинамического языка",shape=box3d];
+dyna -> jit -> dyna;
+{ rank=same; "file.o" -> linker -> "program.exe"; }
+"user.o","win32.dll" -> linker;
+linker [label="linker: линкер"];
+{rank=same; "file.src"; jit; }
+"win32.dll" -> FFI [label="\ динамическое связывание"];
+FFI-> dyna [label="\ интерфейс Fast Foreign Interface"];
+{rank=same; codegen; "user.o"; "win32.dll"; }
+}
